@@ -1,0 +1,3 @@
+001-build.patch
+002-fix-random-compilation-failure.patch
+disable-integration.patch

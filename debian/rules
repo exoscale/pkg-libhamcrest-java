@@ -1,0 +1,55 @@
+#!/usr/bin/make -f
+
+include /usr/share/cdbs/1/class/ant.mk
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+JAVA_HOME		:= /usr/lib/jvm/default-java
+DEB_ANT_BUILDFILE	:= build.xml
+DEB_ANT_BUILD_TARGET	:= bigjar unit-test javadoc
+DEB_JARS		:= jmock qdox ant-junit
+ANT_OPTS		:= -Dant.build.javac.source=1.5 -Dant.build.javac.target=1.5 -Dversion=$(DEB_UPSTREAM_VERSION)
+POMS                    := core generator library all
+
+DEST_DIR = $(DEB_DESTDIR)/usr/share/java
+
+binary-post-install/libhamcrest-java::
+	# Add OSGi-metadata to the manifests.
+	# This is needed for eclipse.
+	for manifest in debian/manifest/*.mf ; do \
+		base=`basename $$manifest .mf` ; \
+		f=`ls build/hamcrest-$$base-$(DEB_UPSTREAM_VERSION).jar` ; \
+		if [ -n "$$f" ]; then \
+		   echo `basename "$$f"` "[ok]" ; \
+		   jar umf $$manifest $$f ; \
+		else \
+		   echo "No file like 'build/hamcrest-$$base-$(DEB_UPSTREAM_VERSION).jar' existing." ; \
+		fi ; \
+	done
+	for pom in $(POMS); do \
+		pomfile=hamcrest-$$pom-$(DEB_UPSTREAM_VERSION).pom; \
+		mh_installpom -o -e$(DEB_UPSTREAM_VERSION) \
+		-plibhamcrest-java $$pomfile; \
+		mh_installjar -l -e$(DEB_UPSTREAM_VERSION) -j$(DEB_UPSTREAM_VERSION) \
+		-plibhamcrest-java $$pomfile build/hamcrest-$$pom-$(DEB_UPSTREAM_VERSION).jar; \
+	done
+	
+	dh_install -plibhamcrest-java build/hamcrest-unit-test-$(DEB_UPSTREAM_VERSION).jar usr/share/java
+	dh_link -plibhamcrest-java usr/share/java/hamcrest-unit-test-$(DEB_UPSTREAM_VERSION).jar usr/share/java/hamcrest-unit-test.jar
+
+clean::
+	rm -fr debian/.mh/
+	rm -f *.jar
+	mkdir -p lib/integration
+	for f in `cat debian/integration-unit-tests`; do \
+		i_f=$${f}.ignore; \
+		[ -f $$i_f ] && mv $$i_f $$f || : ;\
+	done
+
+pre-build::
+	for f in `cat debian/integration-unit-tests`; do \
+		i_f=$${f}.ignore; \
+		[ -f $$f ] && mv $$f $$i_f || : ;\
+    done
+
+get-orig-source:
+	-uscan --download-version $(DEB_UPSTREAM_VERSION) --force-download --debug --rename

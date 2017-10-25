@@ -1,0 +1,40 @@
+Source: libhamcrest-java
+Section: java
+Priority: optional
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
+Uploaders: Varun Hiremath <varun@debian.org>,
+ Damien Raude-Morvan <drazzib@debian.org>,
+ Brian Thomason <brian.thomason@gmail.com>,
+ Emmanuel Bourg <ebourg@apache.org>
+Build-Depends: cdbs, debhelper (>= 9), ant, ant-optional, default-jdk, maven-repo-helper
+Build-Depends-Indep: libqdox-java, libjmock-java, libjarjar-java,
+ default-jdk-doc, junit-doc, junit4-doc, junit, junit4
+Standards-Version: 3.9.5
+Vcs-Svn: svn://anonscm.debian.org/pkg-java/trunk/libhamcrest-java
+Vcs-Browser: http://anonscm.debian.org/viewvc/pkg-java/trunk/libhamcrest-java
+Homepage: http://hamcrest.org
+
+Package: libhamcrest-java
+Architecture: all
+Depends: ${misc:Depends}
+Description: library of matchers for building test expressions
+ Provides a library of matcher objects (also known as constraints or
+ predicates) allowing 'match' rules to be defined declaratively, to be
+ used in other frameworks. Typical scenarios include testing
+ frameworks, mocking libraries and UI validation rules.
+
+Package: libhamcrest-java-doc
+Architecture: all
+Section: doc
+Depends: ${misc:Depends}
+Recommends: default-jdk-doc, junit-doc, junit4-doc
+Suggests: libhamcrest-java
+Description: library of matchers for building test expressions - documentation
+ Provides a library of matcher objects (also known as constraints or
+ predicates) allowing 'match' rules to be defined declaratively, to be
+ used in other frameworks. Typical scenarios include testing
+ frameworks, mocking libraries and UI validation rules.
+ .
+ This package contains Javadoc API documentation of Hamcrest.
+

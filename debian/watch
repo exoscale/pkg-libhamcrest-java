@@ -1,0 +1,3 @@
+version=3
+opts="downloadurlmangle=s|.*(hamcrest-.*\.tgz).*|http://hamcrest.googlecode.com/files/$1|,filenamemangle=s/.*=(.*)/$1/" \
+  http://code.google.com/p/hamcrest/downloads/list .*?name=hamcrest-([\d\.]+).tgz&.* debian debian/orig-tar.sh

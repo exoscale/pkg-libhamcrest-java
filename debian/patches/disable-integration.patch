@@ -1,0 +1,73 @@
+--- a/build.xml
++++ b/build.xml
+@@ -84,18 +84,16 @@
+                                 build/hamcrest-library-${version}.jar"/>
+     </target>
+     
+-    <target name="unit-test" depends="core, library, integration, generator" description="Build and run unit tests.">
++    <target name="unit-test" depends="core, library, generator" description="Build and run unit tests.">
+         <java-to-jar srcdir="hamcrest-unit-test/src/main/java" modulename="hamcrest-unit-test"
+                      classpath="build/hamcrest-core-${version}.jar;
+                                 build/hamcrest-library-${version}.jar;
+-                                build/hamcrest-integration-${version}.jar;
+                                 build/hamcrest-generator-${version}.jar"/>
+         <junit printsummary="no" fork="no" haltonfailure="${haltonfailure}">
+             <formatter type="brief" usefile="no"/>
+             <classpath>
+                 <pathelement path="build/hamcrest-core-${version}.jar"/>
+                 <pathelement path="build/hamcrest-library-${version}.jar"/>
+-                <pathelement path="build/hamcrest-integration-${version}.jar"/>
+                 <pathelement path="build/hamcrest-generator-${version}.jar"/>
+                 <pathelement path="build/hamcrest-unit-test-${version}.jar"/>
+                 <fileset dir="/usr/share/java">
+@@ -109,6 +107,7 @@
+                 <fileset dir="hamcrest-unit-test/src/main/java">
+                     <include name="**/*Test*"/>
+                     <exclude name="**/Abstract*"/>
++                    <exclude name="**/integration/*"/>
+                 </fileset>
+             </batchtest>
+         </junit>
+@@ -122,7 +121,7 @@
+                                 build/hamcrest-integration-${version}.jar"/>
+     </target>
+ 
+-    <target name="bigjar" depends="core, library, integration, generator"
++    <target name="bigjar" depends="core, library, generator"
+             description="Build a single Jar (hamcrest-all.jar) that contains core, library, generator and integration.">
+         <mkdir dir="build/temp/hamcrest-all-${version}.jar.manifest"/>
+         <manifest file="build/temp/hamcrest-all-${version}.jar.manifest/MANIFEST.MF">
+@@ -136,13 +135,11 @@
+             <zipfileset src="build/hamcrest-core-${version}.jar"/>
+             <zipfileset src="build/hamcrest-library-${version}.jar"/>
+             <zipfileset src="build/hamcrest-generator-${version}.jar"/>
+-            <zipfileset src="build/hamcrest-integration-${version}.jar"/>
+         </jar>
+         <jar jarfile="build/hamcrest-all-${version}-sources.jar" duplicate="preserve" manifest="build/temp/hamcrest-all-${version}.jar.manifest/MANIFEST.MF">
+             <zipfileset src="build/hamcrest-core-${version}-sources.jar"/>
+             <zipfileset src="build/hamcrest-library-${version}-sources.jar"/>
+             <zipfileset src="build/hamcrest-generator-${version}-sources.jar"/>
+-            <zipfileset src="build/hamcrest-integration-${version}-sources.jar"/>
+         </jar>
+     </target>
+ 
+@@ -150,7 +147,6 @@
+         <java-to-javadoc-jar modulename="hamcrest-generator-nodeps"/>
+         <java-to-javadoc-jar modulename="hamcrest-core"/>
+         <java-to-javadoc-jar modulename="hamcrest-library"/>
+-        <java-to-javadoc-jar modulename="hamcrest-integration"/>
+         <copy file="build/hamcrest-generator-nodeps-${version}-javadoc.jar" tofile="build/hamcrest-generator-${version}-javadoc.jar"/>
+ 
+         <javadoc packagenames="org.hamcrest.*" defaultexcludes="yes"
+@@ -163,11 +159,9 @@
+             </classpath>
+             <packageset dir="build/temp/hamcrest-core-${version}-sources.jar.contents"/>
+             <packageset dir="build/temp/hamcrest-library-${version}-sources.jar.contents" excludes="org/hamcrest/internal"/>
+-            <packageset dir="build/temp/hamcrest-integration-${version}-sources.jar.contents"/>
+             
+             <group title="Hamcrest API and Utility Classes" packages="org.hamcrest"/>
+             <group title="Matcher Library" packages="org.hamcrest.*"/>
+-            <group title="Integration" packages="org.hamcrest.integration, org.hamcrest.integration.*"/>
+             
+             <link offline="false" href="/usr/share/doc/junit-doc/javadoc/"/>
+             <link offline="false" href="/usr/share/doc/junit4-doc/javadoc_40/"/>
