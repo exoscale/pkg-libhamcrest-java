@@ -1,6 +1,7 @@
 libhamcrest-java (1.3-5ubuntu1~precise0+exo1) precise; urgency=medium
 
   * Backport for Precise.
+  * Ensure `lib/integration` exists.
 
  -- Vincent Bernat <bernat@debian.org>  Wed, 25 Oct 2017 21:07:48 +0200
 

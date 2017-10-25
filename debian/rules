@@ -46,6 +46,7 @@ clean::
 	done
 
 pre-build::
+	mkdir -p lib/integration
 	for f in `cat debian/integration-unit-tests`; do \
 		i_f=$${f}.ignore; \
 		[ -f $$f ] && mv $$f $$i_f || : ;\
